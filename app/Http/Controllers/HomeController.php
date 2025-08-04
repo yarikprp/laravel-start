@@ -10,9 +10,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $users = User::query()
-            ->select(['id', 'name', 'email'])
+        $articles = Article::query()
+            ->whereBelongsTo(User::find(3))
+            /*->whereRelation('comments', function ($query) {$query->where('user_id', 3);})*/
+            /*->whereHas('comments', function ($query) {$query->where('user_id', 3);})*/
+            /*->with('comments')*/
             ->paginate(10);
-        return view('welcome', compact('users'));
+        return view('welcome', compact('articles'));
     }
 }
