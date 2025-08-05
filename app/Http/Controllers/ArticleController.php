@@ -7,6 +7,8 @@ use App\Models\Article;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -16,7 +18,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::query()
-            ->select(['id', 'title', 'created_at', 'user_id'])
+            ->select(['id', 'title', 'thumbnail', 'created_at', 'user_id'])
             ->with(['user:id,name'])
             ->withCount('comments')
             ->latest()
@@ -58,9 +60,23 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        $article->update($request->only(['title', 'text', 'user_id']));
+        $data = $request->only(['title', 'text', 'user_id']);
 
-        return redirect()->route('articles.index');
+        if ($request->hasFile('thumbnail')) {
+            /** @var UploadedFile $file */
+            $file = $request->file('thumbnail');
+
+            if ($article->thumbnail) {
+                Storage::disk('public')->delete($article->thumbnail);
+            }
+
+            $data['thumbnail'] = $file->store('images/articles', 'public');
+        }
+
+        // Обновляем статью
+        $article->update($data);
+
+        return redirect()->route('articles.index')->with('success', 'Статья успешно обновлена.');
     }
 
     /**

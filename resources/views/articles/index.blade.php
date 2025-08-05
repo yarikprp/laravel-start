@@ -24,6 +24,9 @@
                                         Автор
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Обложка
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Дата создания
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -50,6 +53,18 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($article->thumbnail)
+                                                <img
+                                                    src="{{ Storage::url($article->thumbnail) }}"
+                                                    alt="Обложка"
+                                                    class="h-12 w-auto rounded border"
+                                                />
+                                            @else
+                                                <span class="text-gray-400">Нет</span>
+                                            @endif
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-500">
                                                 {{ $article->created_at->format('d.m.Y') }}
                                             </div>
@@ -62,7 +77,6 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end items-center space-x-3">
-                                            <!-- Редактировать -->
                                             <a
                                                 href="{{ route('articles.edit', $article) }}"
                                                 class="text-indigo-600 hover:text-indigo-900"
@@ -70,7 +84,6 @@
                                                 Редактировать
                                             </a>
 
-                                            <!-- Удалить -->
                                             <form
                                                 action="{{ route('articles.destroy', $article) }}"
                                                 method="POST"

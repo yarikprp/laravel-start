@@ -25,6 +25,7 @@ class UpdateArticleRequest extends FormRequest
             'title' => 'required|string|min:5',
             'user_id' => 'required|exists:users,id',
             'text' => 'required|string|min:10',
+            'thumbnail' => 'image',
         ];
     }
 }

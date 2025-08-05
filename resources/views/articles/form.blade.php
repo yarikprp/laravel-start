@@ -9,7 +9,7 @@
             Вернуться назад
         </a>
 
-        <form action="{{ isset($article) ? route('articles.update', $article) : route('articles.store') }}" method="POST">
+        <form action="{{ isset($article) ? route('articles.update', $article) : route('articles.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($article))
                 @method('PUT')
@@ -60,6 +60,15 @@
                             @enderror
                         </div>
 
+                        <div class="col-span-6">
+                            <label class="block text-sm font-medium text-gray-700">Обложка</label>
+                            <input
+                                type="file"
+                                name="thumbnail">
+                            @error('thumbnail')
+                            <div class="text-red-500 mt-2">Поле "заголовок" обязательно</div>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 
